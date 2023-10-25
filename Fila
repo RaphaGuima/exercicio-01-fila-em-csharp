@@ -1,0 +1,63 @@
+using System;
+using System.Collections;
+using System.Threading;
+
+class Program
+{
+    static Queue filaClientes = new Queue();
+    static Random random = new Random();
+
+    class Cliente
+    {
+        public string Nome { get; set; }
+        public int TempoAtendimento { get; set; }
+
+        public Cliente(string nome)
+        {
+            Nome = nome;
+            TempoAtendimento = random.Next(1, 6); 
+        }
+    }
+
+    class Funcionario
+    {
+        public string Nome { get; set; }
+
+        public Funcionario(string nome)
+        {
+            Nome = nome;
+        }
+    }
+
+    static void Main(string[] args)
+    {
+        Funcionario funcionario1 = new Funcionario("Atendente 1");
+        Funcionario funcionario2 = new Funcionario("Atendente 2");
+
+        Console.WriteLine("Simulação de Atendimento de Filas\n");
+
+        while (true)
+        {
+            Console.Write("Nome do cliente (ou 'sair' para encerrar): ");
+            string nomeCliente = Console.ReadLine();
+
+            if (nomeCliente.ToLower() == "sair")
+                break;
+
+            Cliente cliente = new Cliente(nomeCliente);
+            filaClientes.Enqueue(cliente);
+        }
+
+        while (filaClientes.Count > 0)
+        {
+            Cliente cliente = (Cliente)filaClientes.Dequeue();
+
+            Console.WriteLine($"Atendente {funcionario1.Nome} está atendendo o cliente {cliente.Nome}");
+            Thread.Sleep(cliente.TempoAtendimento * 1000);
+            Console.WriteLine($"Cliente {cliente.Nome} atendido em {cliente.TempoAtendimento} segundos.\n");
+        }
+
+        Console.WriteLine("Todos os clientes foram atendidos.");
+        Console.ReadLine(); 
+    }
+}
